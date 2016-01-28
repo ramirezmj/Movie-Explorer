@@ -1,0 +1,234 @@
+﻿<Page
+    x:Class="MovieExplorer.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MovieExplorer"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:controls="using:MovieExplorer.Controls"
+    DataContext="{Binding MainViewModel, Source={StaticResource vmLocator}}"
+    mc:Ignorable="d" RequestedTheme="Dark">
+
+	<Pivot Title="Movie Explorer" PivotItemLoaded="Pivot_PivotItemLoaded">
+		<Pivot.Background>
+					<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+						<GradientStop Color="Black" Offset="0"/>
+						<GradientStop Color="#FF432F2F" Offset="1"/>
+					</LinearGradientBrush>
+		</Pivot.Background>
+		
+		<!--IMDB Movies-->
+		<PivotItem Header="Movies">
+			<Grid>
+				<ListView  
+			x:Name="LVF"
+			ItemsSource="{Binding MovieCollection}" SelectionChanged="LVF_SelectionChanged">
+					<ListView.HeaderTemplate>
+						<DataTemplate>
+							<Grid Style="{StaticResource lvhGrid}">
+
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="Auto" />
+								</Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto" />
+									<RowDefinition Height="Auto" />
+									<RowDefinition Height="Auto" />
+								</Grid.RowDefinitions>
+
+								<TextBlock Grid.ColumnSpan="2" Grid.Row="0" Text="SEARCH MOVIES:" Style="{StaticResource lvhText}"/>
+								<TextBox Grid.Column="0" Grid.Row="1"  Style="{StaticResource lvhBox}"
+								 Text="{Binding Movie, Mode=TwoWay}"/>
+								<Button 
+							Grid.Column="1" 
+							Grid.Row="1" 
+							Content="Go!"  
+							Style="{StaticResource lvhButton}"
+							Command="{Binding SetMovieCommand}"
+							CommandParameter="{Binding Movie}"/>
+
+								<ProgressBar Grid.ColumnSpan="2" Grid.Row="2" Margin="10" Visibility="{Binding ProgressBarEnabled, Converter={StaticResource boolToVisibility}}" IsIndeterminate="True" />
+							</Grid>
+						</DataTemplate>
+					</ListView.HeaderTemplate>
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<Grid Style="{StaticResource lviMainGrid}">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="Auto" />
+									<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
+
+								<Image Grid.Column="0" Source="{Binding Poster}" Style="{StaticResource lviImage}" />
+
+								<Grid  Grid.Column="1" >
+									<Grid.RowDefinitions>
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="*" />
+									</Grid.RowDefinitions>
+									<Viewbox Grid.Row="0" Style="{StaticResource lviTitleVB}" HorizontalAlignment="Left">
+										<TextBlock Text="{Binding Title}" TextWrapping="NoWrap" Foreground="#FFF6F6F5" FontWeight="Bold"  />
+									</Viewbox>
+									<TextBlock Grid.Row="1" Text="{Binding Description}" Foreground="#FFDFDDDD" TextWrapping="Wrap" />
+								</Grid>
+							</Grid>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+					<ListView.FooterTemplate>
+						<DataTemplate>
+							<Grid Style="{StaticResource lvfGrid}">
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"/>
+								</Grid.RowDefinitions>
+								<TextBlock 
+							Text="{Binding NumResultsMovies}" 
+							TextWrapping="Wrap"
+							/>
+							</Grid>
+						</DataTemplate>
+					</ListView.FooterTemplate>
+				</ListView>
+			</Grid>
+		</PivotItem>
+
+		<!--TV Shows-->
+		<PivotItem Header="TV Shows">
+			<Grid>
+				<ListView  
+			x:Name="LVFTVShows"
+			ItemsSource="{Binding TVShowCollection}" SelectionChanged="LVFTVShows_SelectionChanged">
+					<ListView.HeaderTemplate>
+						<DataTemplate>
+							<Grid Style="{StaticResource lvhGrid}">
+
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="Auto" />
+								</Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto" />
+									<RowDefinition Height="Auto" />
+									<RowDefinition Height="Auto" />
+								</Grid.RowDefinitions>
+
+								<TextBlock Grid.ColumnSpan="2" Grid.Row="0" Text="SEARCH TV SHOWS:" Style="{StaticResource lvhText}"/>
+								<TextBox Grid.Column="0" Grid.Row="1"  Style="{StaticResource lvhBox}"
+								 Text="{Binding TVShow, Mode=TwoWay}"/>
+								<Button 
+							Grid.Column="1" 
+							Grid.Row="1" 
+							Content="Go!"  
+							Style="{StaticResource lvhButton}"
+							Command="{Binding SetTVShowCommand}"
+							CommandParameter="{Binding TVShow}"/>
+
+								<ProgressBar Grid.ColumnSpan="2" Grid.Row="2" Margin="10" Visibility="{Binding ProgressBarEnabled, Converter={StaticResource boolToVisibility}}" IsIndeterminate="True" />
+							</Grid>
+						</DataTemplate>
+					</ListView.HeaderTemplate>
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<Grid Style="{StaticResource lviMainGrid}">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="Auto" />
+									<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
+
+								<Image Grid.Column="0" Source="{Binding Poster}" Style="{StaticResource lviImage}" />
+
+								<Grid  Grid.Column="1" >
+									<Grid.RowDefinitions>
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="*" />
+									</Grid.RowDefinitions>
+									<Viewbox Grid.Row="0" Style="{StaticResource lviTitleVB}" HorizontalAlignment="Left">
+										<TextBlock Text="{Binding Title}" TextWrapping="NoWrap" Foreground="#FFF6F6F5" FontWeight="Bold"  />
+									</Viewbox>
+									<controls:StarRating Grid.Row="1" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Rate="{Binding Rate}"/>
+									
+								</Grid>
+							</Grid>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+					<ListView.FooterTemplate>
+						<DataTemplate>
+							<Grid Style="{StaticResource lvfGrid}">
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"/>
+								</Grid.RowDefinitions>
+								<TextBlock 
+							Text="{Binding NumResultsTVShows}" 
+							TextWrapping="Wrap"
+							/>
+							</Grid>
+						</DataTemplate>
+					</ListView.FooterTemplate>
+				</ListView>
+			</Grid>
+		</PivotItem>
+	</Pivot>
+	
+	<!--End Pivot-->
+	<Page.BottomAppBar>
+		<CommandBar x:Name="MoviesCommandBar">
+			<CommandBar.PrimaryCommands>
+				<AppBarButton x:Name="ClearMovie"
+                        Label="clear list" 
+                        Icon="Clear" 
+                        Command="{Binding ClearMovieCommand}"/>
+				<AppBarButton x:Name="ClearTVShow"
+					Label="clear list"
+					Icon="Clear"
+					Command="{Binding ClearTVShowCommand}"/>
+			</CommandBar.PrimaryCommands>
+			<CommandBar.SecondaryCommands>
+				
+				<!--Movie AppBarButtons-->
+				<AppBarButton x:Name="Movie1"
+                       Label="Mad Max" 
+                       Command="{Binding FavoriteMovieCommand}"
+					   CommandParameter="Mad Max"/>
+				<AppBarButton x:Name="Movie2"
+                       Label="Star Wars" 
+                       Command="{Binding FavoriteMovieCommand}"
+					   CommandParameter="Star Wars"/>
+				<AppBarButton x:Name="Movie3"
+                       Label="The Revenant" 
+                       Command="{Binding FavoriteMovieCommand}"
+					   CommandParameter="The Revenant"/>
+				<AppBarButton x:Name="Movie4"
+                       Label="The Martian" 
+                       Command="{Binding FavoriteMovieCommand}"
+					   CommandParameter="The Martian"/>
+				<AppBarButton x:Name="Movie5"
+                       Label="Interstellar" 
+                       Command="{Binding FavoriteMovieCommand}"
+					   CommandParameter="Interstellar"/>
+				
+				<!--TVShow AppBarButtons-->
+				<AppBarButton x:Name="TVShow1"
+                       Label="Breaking bad" 
+                       Command="{Binding FavoriteTVShowCommand}"
+					   CommandParameter="Breaking Bad"/>
+				<AppBarButton x:Name="TVShow2"
+                       Label="Mad Men" 
+                       Command="{Binding FavoriteTVShowCommand}"
+					   CommandParameter="Mad Men"/>
+				<AppBarButton x:Name="TVShow3"
+                       Label="Narcos" 
+                       Command="{Binding FavoriteTVShowCommand}"
+					   CommandParameter="Narcos"/>
+				<AppBarButton x:Name="TVShow4"
+                       Label="Mr Robot" 
+                       Command="{Binding FavoriteTVShowCommand}"
+					   CommandParameter="Mr Robot"/>
+				<AppBarButton x:Name="TVShow5"
+                       Label="Master of None" 
+                       Command="{Binding FavoriteTVShowCommand}"
+					   CommandParameter="Master of None"/>
+			</CommandBar.SecondaryCommands>
+		</CommandBar>
+	</Page.BottomAppBar>
+
+</Page>

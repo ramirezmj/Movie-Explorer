@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="urn:WSFilmSearch" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="urn:WSFilmSearch" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="urn:WSFilmSearch">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+      <xsd:complexType name="Film">
+        <xsd:all>
+          <xsd:element name="Id" type="xsd:int" />
+          <xsd:element name="Title" type="xsd:string" />
+          <xsd:element name="Description" type="xsd:string" />
+          <xsd:element name="Year" type="xsd:int" />
+          <xsd:element name="Poster" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="FilmArray">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="item" type="tns:Film" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="SearchMoviesByNameRequest">
+    <wsdl:part name="title" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchMoviesByNameResponse">
+    <wsdl:part name="return" type="tns:FilmArray" />
+  </wsdl:message>
+  <wsdl:portType name="WSFilmSearchPortType">
+    <wsdl:operation name="SearchMoviesByName">
+      <documentation>Given a name returns the movies associated with it.</documentation>
+      <wsdl:input message="tns:SearchMoviesByNameRequest" />
+      <wsdl:output message="tns:SearchMoviesByNameResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WSFilmSearchBinding" type="tns:WSFilmSearchPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="SearchMoviesByName">
+      <soap:operation soapAction="http://ws.flosti.net/ws_film_search.php/SearchMoviesByName" style="rpc" />
+      <wsdl:input>
+        <soap:body use="literal" namespace="WSFlosti" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" namespace="WSFlosti" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WSFilmSearch">
+    <wsdl:port name="WSFilmSearchPort" binding="tns:WSFilmSearchBinding">
+      <soap:address location="http://ws.flosti.net/ws_film_search.php" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

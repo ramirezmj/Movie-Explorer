@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="urn:WSFilmInfo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="urn:WSFilmInfo" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="urn:WSFilmInfo">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+      <xsd:complexType name="ActorInfo">
+        <xsd:sequence>
+          <xsd:element name="Name" type="xsd:string" />
+          <xsd:element name="Character" type="xsd:string" />
+          <xsd:element name="Picture" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="CrewInfo">
+        <xsd:sequence>
+          <xsd:element name="Name" type="xsd:string" />
+          <xsd:element name="Department" type="xsd:string" />
+          <xsd:element name="Job" type="xsd:string" />
+          <xsd:element name="Picture" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="FilmInfo">
+        <xsd:sequence>
+          <xsd:element name="Id" type="xsd:int" />
+          <xsd:element name="Title" type="xsd:string" />
+          <xsd:element name="Director" type="xsd:string" />
+          <xsd:element name="Day" type="xsd:int" />
+          <xsd:element name="Month" type="xsd:int" />
+          <xsd:element name="Year" type="xsd:int" />
+          <xsd:element name="Description" type="xsd:string" />
+          <xsd:element name="Summary" type="xsd:string" />
+          <xsd:element name="Background" type="xsd:string" />
+          <xsd:element name="Rate" type="xsd:decimal" />
+          <xsd:element name="Web" type="xsd:string" />
+          <xsd:element name="Poster" type="xsd:string" />
+          <xsd:element name="Status" type="xsd:string" />
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="Genres" type="xsd:string" />
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="ProductionCompanies" type="xsd:string" />
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="ProductionCountries" type="xsd:string" />
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="Cast" type="tns:ActorInfo" />
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="Crew" type="tns:CrewInfo" />
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="Trailers" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="GetMovieDataByIdRequest">
+    <wsdl:part name="id" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="GetMovieDataByIdResponse">
+    <wsdl:part name="return" type="tns:FilmInfo" />
+  </wsdl:message>
+  <wsdl:portType name="WSFilmInfoPortType">
+    <wsdl:operation name="GetMovieDataById">
+      <documentation>Given a movie ID returns all the information asociated with it.</documentation>
+      <wsdl:input message="tns:GetMovieDataByIdRequest" />
+      <wsdl:output message="tns:GetMovieDataByIdResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WSFilmInfoBinding" type="tns:WSFilmInfoPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="GetMovieDataById">
+      <soap:operation soapAction="http://ws.flosti.net/ws_film_info.php/GetMovieDataById" style="rpc" />
+      <wsdl:input>
+        <soap:body use="literal" namespace="WSFilmInfo" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" namespace="WSFilmInfo" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WSFilmInfo">
+    <wsdl:port name="WSFilmInfoPort" binding="tns:WSFilmInfoBinding">
+      <soap:address location="http://ws.flosti.net/ws_film_info.php" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="urn:WSTvInfo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="urn:WSTvInfo" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="urn:WSTvInfo">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+      <xsd:complexType name="CreatorInfo">
+        <xsd:sequence>
+          <xsd:element name="Name" type="xsd:string" />
+          <xsd:element name="Picture" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="SeasonInfo">
+        <xsd:sequence>
+          <xsd:element name="Number" type="xsd:int" />
+          <xsd:element name="AirDate" type="xsd:string" />
+          <xsd:element name="Poster" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ActorInfo">
+        <xsd:sequence>
+          <xsd:element name="Name" type="xsd:string" />
+          <xsd:element name="Character" type="xsd:string" />
+          <xsd:element name="Picture" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="CrewInfo">
+        <xsd:sequence>
+          <xsd:element name="Name" type="xsd:string" />
+          <xsd:element name="Department" type="xsd:string" />
+          <xsd:element name="Job" type="xsd:string" />
+          <xsd:element name="Picture" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="TvShowInfo">
+        <xsd:sequence>
+          <xsd:element name="Id" type="xsd:int" />
+          <xsd:element name="Title" type="xsd:string" />
+          <xsd:element name="Day" type="xsd:int" />
+          <xsd:element name="Month" type="xsd:int" />
+          <xsd:element name="Year" type="xsd:int" />
+          <xsd:element name="Summary" type="xsd:string" />
+          <xsd:element name="Background" type="xsd:string" />
+          <xsd:element name="Rate" type="xsd:decimal" />
+          <xsd:element name="Web" type="xsd:string" />
+          <xsd:element name="Poster" type="xsd:string" />
+          <xsd:element name="Status" type="xsd:string" />
+          <xsd:element name="NumEpisodes" type="xsd:int" />
+          <xsd:element name="NumSeasons" type="xsd:int" />
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="Genres" type="xsd:string" />
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="Creators" type="tns:CreatorInfo" />
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="Seasons" type="tns:SeasonInfo" />
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="Cast" type="tns:ActorInfo" />
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="Crew" type="tns:CrewInfo" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="GetTvShowDataByIdRequest">
+    <wsdl:part name="id" type="xsd:int" />
+  </wsdl:message>
+  <wsdl:message name="GetTvShowDataByIdResponse">
+    <wsdl:part name="return" type="tns:TvShowInfo" />
+  </wsdl:message>
+  <wsdl:portType name="WSTvInfoPortType">
+    <wsdl:operation name="GetTvShowDataById">
+      <documentation>Given a tv show ID returns all the information asociated with it.</documentation>
+      <wsdl:input message="tns:GetTvShowDataByIdRequest" />
+      <wsdl:output message="tns:GetTvShowDataByIdResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WSTvInfoBinding" type="tns:WSTvInfoPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="GetTvShowDataById">
+      <soap:operation soapAction="http://ws.flosti.net/ws_tv_info.php/GetTvShowDataById" style="rpc" />
+      <wsdl:input>
+        <soap:body use="literal" namespace="WSTvInfo" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" namespace="WSTvInfo" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WSTvInfo">
+    <wsdl:port name="WSTvInfoPort" binding="tns:WSTvInfoBinding">
+      <soap:address location="http://ws.flosti.net/ws_tv_info.php" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

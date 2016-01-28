@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="urn:WSTvSearch" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="urn:WSTvSearch" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="urn:WSTvSearch">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+      <xsd:complexType name="Tv">
+        <xsd:all>
+          <xsd:element name="Id" type="xsd:int" />
+          <xsd:element name="Title" type="xsd:string" />
+          <xsd:element name="Rate" type="xsd:decimal" />
+          <xsd:element name="Year" type="xsd:int" />
+          <xsd:element name="Poster" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="TvArray">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="item" type="tns:Tv" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="SearchTvByNameRequest">
+    <wsdl:part name="title" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="SearchTvByNameResponse">
+    <wsdl:part name="return" type="tns:TvArray" />
+  </wsdl:message>
+  <wsdl:portType name="WSTvSearchPortType">
+    <wsdl:operation name="SearchTvByName">
+      <documentation>Given a name returns the movies associated with it.</documentation>
+      <wsdl:input message="tns:SearchTvByNameRequest" />
+      <wsdl:output message="tns:SearchTvByNameResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WSTvSearchBinding" type="tns:WSTvSearchPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="SearchTvByName">
+      <soap:operation soapAction="http://ws.flosti.net/ws_tv_search.php/SearchTvByName" style="rpc" />
+      <wsdl:input>
+        <soap:body use="literal" namespace="WSFlosti" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" namespace="WSFlosti" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WSTvSearch">
+    <wsdl:port name="WSTvSearchPort" binding="tns:WSTvSearchBinding">
+      <soap:address location="http://ws.flosti.net/ws_tv_search.php" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
